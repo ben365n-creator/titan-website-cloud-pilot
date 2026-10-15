@@ -1,0 +1,38 @@
+name: One public homepage cloud pilot
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-homepage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout only the reviewed public harness
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, verified official ref
+        with:
+          persist-credentials: false
+      - name: Use the exact Node version
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, verified official ref
+        with:
+          node-version: 22.19.0
+      - name: Static policy checks without a browser
+        run: npm test
+      - name: Install pinned dependencies without lifecycle scripts or cache
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Install disposable Chromium on the hosted runner
+        run: npx --no-install playwright install --with-deps chromium
+      - name: Render the one reviewed homepage once at 390px
+        run: npm run pilot
+      - name: Preserve only sanitized public diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4, verified official ref
+        with:
+          name: public-homepage-pilot-${{ github.run_id }}
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 1
+          include-hidden-files: false

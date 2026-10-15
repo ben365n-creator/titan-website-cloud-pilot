@@ -1,0 +1,14 @@
+[
+  {
+    "url": "https://865titanconcrete.com/",
+    "assertions": {
+      "titleEquals": "865 Titan Concrete | Commercial & Residential Concrete",
+      "h1Equals": "865 Titan Concrete",
+      "canonicalEquals": "https://865titanconcrete.com/",
+      "bodyIncludes": [
+        "865 Titan Concrete"
+      ],
+      "previousHtmlSha256": "ede32000f6e9cd5f772dde66fd836cb00d2d871f0bc8096b8c15f89e085f1639"
+    }
+  }
+]
